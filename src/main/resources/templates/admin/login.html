@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title> 管理员 登录</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+    <style type="text/css">
+        .myLoginClass {
+            color: #4cae4c;
+        }
+
+        .PromptData {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" action="/admin/login">
+                <h4 class="no-margins myLoginClass">登录：
+                    <span th:if="${PromptData != null}" class="PromptData" th:text="${PromptData}"></span>
+                </h4>
+                <p class="m-t-md myLoginClass">登录管理员后台界面</p>
+                <label for="username">
+                    <input type="text" id="username" name="username" class="form-control uname" placeholder="用户名" autocomplete="off"/>
+                </label>
+                <label for="password">
+                    <input type="password" id="password" name="password" class="form-control pword m-b" placeholder="密码"
+                           autocomplete="off"/>
+                </label>
+                <button class="btn btn-success btn-block">登录</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

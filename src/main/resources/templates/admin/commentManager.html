@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - FooTable</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <label for="filter"></label>
+                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="搜索表格...">
+                    <table class="footable table table-stripped" data-page-size="10" data-filter=#filter>
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>商铺名</th>
+                            <th>评论内容</th>
+                            <th>评论时间</th>
+                            <th>删除</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="gradeX" th:each="comment:${commentDetailList}">
+                            <!-- 用户名 -->
+                            <td th:text="${comment.username}"></td>
+                            <!-- 商铺名 -->
+                            <td th:text="${comment.shopName}"></td>
+                            <!-- detail -->
+                            <td th:text="${#strings.abbreviate(comment.detail,10)}" th:title="${comment.detail}"></td>
+                            <!-- 评论时间 -->
+                            <td th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+
+                            <!-- 状态 -->
+<!--                            <td th:switch="${user.enableStatus}" th:id="'userStatus_' + ${user.id} ">-->
+<!--                                <span th:case="0">禁止使用</span>-->
+<!--                                <span th:case="1">正常使用</span>-->
+<!--                            </td>-->
+                            <!-- 操作 -->
+                            <td class="center">
+                                <button class="btn btn-danger btn-primary dim" type="button" id="delByIdBtn"
+                                        th:onclick="delComment([[${comment.id}]])">
+<!--                                        th:href="@{'comment/delCommentById?id='+${comment.id}}">-->
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!--                        <tr class="gradeX">-->
+                        <!--                            &lt;!&ndash; 用户名 &ndash;&gt;-->
+                        <!--                            <td>admin1</td>-->
+                        <!--                            &lt;!&ndash; 昵称 &ndash;&gt;-->
+                        <!--                            <td>凡尘</td>-->
+                        <!--                            &lt;!&ndash; 性别 &ndash;&gt;-->
+                        <!--                            <td>男</td>-->
+                        <!--                            &lt;!&ndash; 电话 &ndash;&gt;-->
+                        <!--                            <td>13672249582</td>-->
+                        <!--                            &lt;!&ndash; 邮箱 &ndash;&gt;-->
+                        <!--                            <td>1441088980@qq.com</td>-->
+                        <!--                            &lt;!&ndash; 身份类别 &ndash;&gt;-->
+                        <!--                            <td class="center">管理员</td>-->
+                        <!--                            &lt;!&ndash; 状态 &ndash;&gt;-->
+                        <!--                            <td class="center">可用</td>-->
+                        <!--                            &lt;!&ndash; 操作 &ndash;&gt;-->
+                        <!--                            <td class="center">-->
+                        <!--                                <button class="btn btn-outline btn-primary dim" type="button"-->
+                        <!--                                        id="examinationPassedButton">-->
+                        <!--                                    <i class="fa fa-check"></i>-->
+                        <!--                                </button>-->
+                        <!--                                <button class="btn btn-outline btn-danger  dim" type="button" id="verifyDisableButton">-->
+                        <!--                                    <i class="fa fa-lock"></i>-->
+                        <!--                                </button>-->
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="9">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 全局js -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/plugins/footable/footable.all.min.js"></script>
+
+<!-- 自定义js -->
+<script src="/js/content.js?v=1.0.0"></script>
+<script>
+    $(document).ready(function () {
+        $('.footable').footable();
+        $('.footable2').footable();
+    });
+</script>
+<script type="text/javascript">
+    function delComment(id)
+    {
+        if(confirm("确定删除该评论吗")){
+            window.location.href="/comment/delCommentById?id=" + id ;
+        }
+    }
+</script>
+</body>
+<!--<script src="/js/admin/commentManager.js"></script>-->
+</html>
