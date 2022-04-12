@@ -22,6 +22,11 @@ const enterProduct = function (productId) {
     window.location.href = "/product/productDetail?productId=" + productId + "&shopId=" + shopId;
 };
 
+const getShopMap = function () {
+    shopId = getUrlParam("shopId");
+    window.location.href = "/frontShop/shopMap?shopId=" + shopId;
+};
+
 // 在页面加载完成执行函数
 $(function () {
     const $searchBar = $('#searchBar'),

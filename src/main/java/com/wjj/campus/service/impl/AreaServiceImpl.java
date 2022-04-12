@@ -1,5 +1,6 @@
 package com.wjj.campus.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wjj.campus.mapper.AreaMapper;
 import com.wjj.campus.entity.Area;
 import com.wjj.campus.service.AreaService;
@@ -18,7 +19,7 @@ import java.util.List;
  * @author jiajie.wan
  */
 @Service
-public class AreaServiceImpl implements AreaService {
+public class AreaServiceImpl extends ServiceImpl<AreaMapper,Area> implements AreaService {
 
     /**
      * 注入区域信息持久化单元

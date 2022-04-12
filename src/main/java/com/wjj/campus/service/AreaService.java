@@ -1,5 +1,6 @@
 package com.wjj.campus.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.wjj.campus.entity.Area;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author jiajie.wan
  */
-public interface AreaService {
+public interface AreaService extends IService<Area> {
     /**
      * 获取区域信息
      *

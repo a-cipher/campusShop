@@ -287,7 +287,7 @@ public class ShopController {
         LocalAccount user = (LocalAccount) request.getSession().getAttribute("user");
         shop.setOwnerId(user.getUserId());
         if (shopService.addShop(shop, fileContainer)) {
-            return JsonResponse.ok("组成成功，请等待管理员审核！");
+            return JsonResponse.ok("注册成功，请等待管理员审核！");
         } else {
             return JsonResponse.errorMsg("注册失败！");
         }

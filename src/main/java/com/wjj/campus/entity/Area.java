@@ -1,5 +1,7 @@
 package com.wjj.campus.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,6 +19,7 @@ public class Area extends Base implements Serializable {
     /**
      * id
      */
+    @TableId
     private Integer areaId;
 
     /**

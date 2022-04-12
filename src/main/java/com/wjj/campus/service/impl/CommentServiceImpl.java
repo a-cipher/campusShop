@@ -1,5 +1,6 @@
 package com.wjj.campus.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wjj.campus.entity.Comment;
 import com.wjj.campus.entity.LocalAccount;
 import com.wjj.campus.entity.PersonInfo;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  * @author jiajie.wan
  */
 @Service
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper,Comment> implements CommentService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.UnsupportedEncodingException;
+
 @SpringBootTest
 class CampusApplicationTests {
 
@@ -50,4 +52,14 @@ class CampusApplicationTests {
         orderFormMapper.selectList(wrapper);
     }
 
+    @Test
+    public void encode() throws UnsupportedEncodingException {
+        String areaName = "东西哦";
+        //编码
+        java.net.URLEncoder.encode(areaName, "UTF-8");
+        System.out.println(areaName);
+        //解码
+        java.net.URLDecoder.decode(areaName, "UTF-8");
+        System.out.println(areaName);
+    }
 }

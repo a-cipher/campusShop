@@ -1,5 +1,6 @@
 package com.wjj.campus.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.wjj.campus.entity.Comment;
 import com.wjj.campus.model.CommentDetail;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author jiajie.wan
  */
-public interface CommentService {
+public interface CommentService extends IService<Comment> {
     List<CommentDetail> getAllComment();
 
     int deleteComment(int id);

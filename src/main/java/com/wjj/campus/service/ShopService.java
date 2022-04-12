@@ -1,5 +1,6 @@
 package com.wjj.campus.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.wjj.campus.entity.Shop;
 import com.wjj.campus.model.FileContainer;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author jiajie.wan
  */
-public interface ShopService {
+public interface ShopService extends IService<Shop> {
 
     /**
      * 添加店铺信息

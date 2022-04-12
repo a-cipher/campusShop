@@ -1,5 +1,6 @@
 package com.wjj.campus.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wjj.campus.mapper.ShopMapper;
 import com.wjj.campus.entity.Shop;
 import com.wjj.campus.entity.ShopCategory;
@@ -32,7 +33,7 @@ import java.util.List;
  * @author jiajie.wan
  */
 @Service
-public class ShopServiceImpl implements ShopService {
+public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ShopService{
 
     /**
      * 日志记录

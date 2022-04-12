@@ -1,6 +1,7 @@
 package com.wjj.campus.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wjj.campus.entity.Area;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @author jiajie.wan
  */
 @Mapper
-public interface AreaMapper {
+public interface AreaMapper extends BaseMapper<Area> {
     /**
      * 查询所有的区域信息
      *

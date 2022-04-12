@@ -29,7 +29,7 @@ public class Headline extends Base implements Serializable {
     private Integer status;
 
     /**
-     * 优先级
+     * 优先级数字越大，优先级越高
      */
     private Integer priority;
 
