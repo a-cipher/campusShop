@@ -72,12 +72,14 @@ $(function () {
         obj.setAttribute("src", "/shop/getStorePhoto?shopId=" + response.data.shopId);//把图片修改为目标路径
         const shopLastEditTime = document.getElementById("shopLastEditTime");
         shopLastEditTime.innerText = myFormatDateTime(response.data.lastEditTime);
+        const shopName = document.getElementById("shopName");
+        shopName.innerText = response.data.shopName;
         const shopDescription = document.getElementById("shopDescription");
         shopDescription.innerText = response.data.shopDescription;
         const shopAddress = document.getElementById("shopAddress");
         shopAddress.innerText = response.data.shopAddress;
         const shopPhone = document.getElementById("shopPhone");
-        shopPhone.innerText = response.data.phone;
+        shopPhone.innerText = '联系：'+response.data.phone;
     });
     // 初次填充数据
     searchProductList(true);

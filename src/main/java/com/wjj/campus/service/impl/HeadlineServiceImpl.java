@@ -49,6 +49,7 @@ public class HeadlineServiceImpl extends ServiceImpl<HeadlineMapper,Headline> im
         }
         String headlineImagePath = PathUtils.getImageBasePath() + headline.getPicture();
         headlineImagePath = PathUtils.replaceFileSeparator(headlineImagePath);
+        logger.info("图片路径"+headlineImagePath);
         assert headlineImagePath != null;
         return new File(headlineImagePath);
     }

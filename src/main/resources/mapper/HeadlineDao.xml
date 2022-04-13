@@ -13,7 +13,7 @@
         <if test="status != null">
             where status = #{status}
         </if>
-        order by priority asc
+        order by priority desc
         <if test="number != null">
             limit #{number}
         </if>

@@ -38,7 +38,7 @@ public class HeadlineUpdate {
      * 定时任务，每天2点自动执行
      * 头条计算：区域权重 + 订单数*3 + 评论数*2
      */
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 35 11 * * *")
     public void updateHeadline(){
         List<Shop> shops = shopMapper.selectList(null);
         Map<Shop, Integer> map = new HashMap<>();

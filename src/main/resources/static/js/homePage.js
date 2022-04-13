@@ -201,12 +201,16 @@ $(function () {
                 if (index === 0) {
                     carouselListHtml += '<li data-target="#myCarousel" data-slide-to="0" class="active"></li>';
                     carouselImageListHtml += '<div class="item active">'
+                        + '<a href="' + item.linked + '" onclick="enterHeadlineShop(' + item.linked + ')">\n'
                         + '<img src="/headline/image?id=' + item.uuid + '" alt="First slide">'
+                        + '</a>'
                         + '</div>';
                 } else {
                     carouselListHtml += '<li data-target="#myCarousel" data-slide-to="' + index + '"></li>';
                     carouselImageListHtml += '<div class="item">'
+                        + '<a href="' + item.linked + '" onclick="enterHeadlineShop(' + item.linked + ')">\n'
                         + '<img src="/headline/image?id=' + item.uuid + '" alt="First slide">'
+                        + '</a>'
                         + '</div>';
                 }
             });
@@ -259,6 +263,10 @@ $(function () {
 const enterShopList = function (shopCategoryId) {
     sessionStorage.setItem("shopCategoryId", shopCategoryId);
     window.location.href = "/frontShop/list";
+};
+
+const enterHeadlineShop = function (linked) {
+    window.location.href = linked;
 };
 
 /**
