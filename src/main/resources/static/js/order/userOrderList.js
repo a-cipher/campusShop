@@ -1,9 +1,11 @@
 /**
  * 订单操作
  * @param orderId 订单编号
+ * @param price
+ * @param orderStatus
  * @constructor
  */
-const OrderOperational = function (orderId,price) {
+const OrderOperational = function (orderId,price,orderStatus) {
     console.log("订单id = " + orderId);
     $.actions({
         actions: [{
@@ -26,6 +28,7 @@ const OrderOperational = function (orderId,price) {
                             data: {
                                 orderId: orderId,
                                 price: price,
+                                orderStatus: orderStatus,
                                 message: input.valueOf()
                             },
                             success: function (rtn) {

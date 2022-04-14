@@ -177,16 +177,21 @@ public class OrderController {
     }
 
     /**
-     * 确认接收订单
+     * 商家确认接收订单
      *
      * @param orderId 订单id
-     * @param message 订单备注信息
+     * @param message 商家备注信息
      * @return 请求结果
      */
     @PostMapping(value = "/confirmOrder")
     @ResponseBody
     public JsonResponse confirmOrder(@RequestParam("orderId") String orderId,
+                                     @RequestParam("orderStatus") int orderStatus,
                                      @RequestParam("message") String message) {
+        //商家只能接单状态为0的订单
+        if (orderStatus != 0){
+            return JsonResponse.errorMsg("该订单状态无法接单");
+        }
         if (orderService.confirmOrder(orderId, message)) {
             Map<String, Object> map = new HashMap<>(2);
             OrderForm orderForm = orderService.getRecordByOrderId(orderId);
@@ -213,8 +218,13 @@ public class OrderController {
     @PostMapping(value = "/rejectOrder")
     @ResponseBody
     public JsonResponse rejectOrder(@RequestParam("orderId") String orderId,
+                                    @RequestParam("orderStatus") int orderStatus,
                                     @RequestParam("price") String price,
                                     @RequestParam("message") String message) throws AlipayApiException {
+        //拒单操作只针对0，1
+        if (orderStatus!=0 && orderStatus!=1){
+            return JsonResponse.errorMsg("该订单状态无法拒单");
+        }
         if (orderService.rejectOrder(orderId, message)) {
             Map<String, Object> map = new HashMap<>(2);
             OrderForm orderForm = orderService.getRecordByOrderId(orderId);
@@ -222,7 +232,7 @@ public class OrderController {
             //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
             if(!refund.isSuccess()){
                 orderService.removeById(orderId);
-                return JsonResponse.errorMsg("订单号不存在，删除该订单");
+                return JsonResponse.errorMsg("异常订单号，删除该订单");
             }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
@@ -246,8 +256,13 @@ public class OrderController {
     @PostMapping(value = "/userRejectOrder")
     @ResponseBody
     public JsonResponse userRejectOrder(@RequestParam("orderId") String orderId,
-                                    @RequestParam("price") String price,
-                                    @RequestParam("message") String message) throws AlipayApiException {
+                                        @RequestParam("orderStatus") int orderStatus,
+                                        @RequestParam("price") String price,
+                                        @RequestParam("message") String message) throws AlipayApiException {
+        //取消订单操作只针对0，1
+        if (orderStatus!=0 && orderStatus!=1){
+            return JsonResponse.errorMsg("该订单状态无法取消订单");
+        }
         if (orderService.userRejectOrder(orderId, message)) {
             Map<String, Object> map = new HashMap<>(2);
             OrderForm orderForm = orderService.getRecordByOrderId(orderId);
@@ -255,7 +270,7 @@ public class OrderController {
             //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
             if(!refund.isSuccess()){
                 orderService.removeById(orderId);
-                return JsonResponse.errorMsg("订单号不存在，删除该订单");
+                return JsonResponse.errorMsg("异常订单号，删除该订单");
             }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);

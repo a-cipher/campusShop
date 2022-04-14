@@ -123,7 +123,7 @@ const submitReviewData = function () {
             console.log(response);
             if (response.status === 200) {
                 console.log("评论成功成功！");
-                $.toast("评论成功成功");
+                $.toast("评论成功");
                 // 修改该商铺的评论数量
                 let commentSize = parseInt($("#commentCount").text()) + 1;
                 $("#commentCount").text(commentSize);
