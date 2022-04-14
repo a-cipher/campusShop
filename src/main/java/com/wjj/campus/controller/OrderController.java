@@ -1,5 +1,8 @@
 package com.wjj.campus.controller;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wjj.campus.conf.OrderConfig;
 import com.wjj.campus.entity.LocalAccount;
 import com.wjj.campus.entity.OrderForm;
@@ -10,11 +13,14 @@ import com.wjj.campus.service.OrderService;
 import com.wjj.campus.service.ProductService;
 import com.alibaba.fastjson.JSON;
 import com.sun.jdi.IntegerType;
+import com.wjj.campus.util.CommonUtils;
+import com.wjj.campus.util.MyAlipayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -55,6 +61,9 @@ public class OrderController {
      * 注入商品服务
      */
     private ProductService productService;
+
+    @Autowired
+    private MyAlipayUtils myAlipayUtils;
 
     /**
      * 请求到商家的订单页面
@@ -129,7 +138,7 @@ public class OrderController {
     }
 
     /**
-     * 提交订单到服务器
+     * 提交订单到服务器，并完成支付
      *
      * @param request          请求会话
      * @param orderInformation 订单信息
@@ -137,8 +146,10 @@ public class OrderController {
      */
     @PostMapping(value = "/submitOrder")
     @ResponseBody
-    public JsonResponse submitOrder(HttpServletRequest request,
-                                    @RequestParam("orderInformation") String orderInformation) {
+    public JsonResponse submitOrder(HttpServletRequest request, Model model,
+                                    @RequestParam("orderInformation") String orderInformation,
+                                    @RequestParam("price") String price,
+                                    @RequestParam("productName") String productName) throws AlipayApiException {
         logger.debug("订单信息：" + orderInformation);
         if (StringUtils.isBlank(orderInformation)) {
             return JsonResponse.errorMsg("提交信息不能为空！");
@@ -151,8 +162,15 @@ public class OrderController {
             return JsonResponse.errorMsg("未登录，获取用户信息出错！");
         }
         logger.debug("转换的json对对象！" + orderForm.toString());
+        //订单id  商品id  商铺id
+        String orderId = CommonUtils.getUniversallyUniqueIdentifier();
+        int productId = orderForm.getProductId();
+        int shopId = orderForm.getShopId();
+        orderForm.setOrderId(orderId);
         if (orderService.addRecord(orderForm)) {
-            return JsonResponse.ok("提交成功！");
+            String pay = myAlipayUtils.pay(orderId,price,productName,productId,shopId);
+            model.addAttribute("form",pay);
+            return JsonResponse.ok("即将跳转...",pay);
         } else {
             return JsonResponse.errorMsg("添加失败！");
         }
@@ -186,7 +204,7 @@ public class OrderController {
     }
 
     /**
-     * 确认拒绝订单
+     * 确认拒绝订单，并在用户付款的情况下需要退款
      *
      * @param orderId 订单id
      * @param message 订单备注
@@ -195,10 +213,17 @@ public class OrderController {
     @PostMapping(value = "/rejectOrder")
     @ResponseBody
     public JsonResponse rejectOrder(@RequestParam("orderId") String orderId,
-                                    @RequestParam("message") String message) {
+                                    @RequestParam("price") String price,
+                                    @RequestParam("message") String message) throws AlipayApiException {
         if (orderService.rejectOrder(orderId, message)) {
             Map<String, Object> map = new HashMap<>(2);
             OrderForm orderForm = orderService.getRecordByOrderId(orderId);
+            AlipayTradeRefundResponse refund = myAlipayUtils.refund(orderId, price, message);
+            //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
+            if(!refund.isSuccess()){
+                orderService.removeById(orderId);
+                return JsonResponse.errorMsg("订单号不存在，删除该订单");
+            }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
             } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_UNPROCESSED_INDEX) {
@@ -213,7 +238,7 @@ public class OrderController {
     }
 
     /**
-     * 用户取消订单
+     * 用户取消订单，直接退款
      * @param orderId
      * @param message
      * @return
@@ -221,10 +246,17 @@ public class OrderController {
     @PostMapping(value = "/userRejectOrder")
     @ResponseBody
     public JsonResponse userRejectOrder(@RequestParam("orderId") String orderId,
-                                    @RequestParam("message") String message) {
+                                    @RequestParam("price") String price,
+                                    @RequestParam("message") String message) throws AlipayApiException {
         if (orderService.userRejectOrder(orderId, message)) {
             Map<String, Object> map = new HashMap<>(2);
             OrderForm orderForm = orderService.getRecordByOrderId(orderId);
+            AlipayTradeRefundResponse refund = myAlipayUtils.refund(orderId, price, message);
+            //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
+            if(!refund.isSuccess()){
+                orderService.removeById(orderId);
+                return JsonResponse.errorMsg("订单号不存在，删除该订单");
+            }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
             } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_UNPROCESSED_INDEX) {

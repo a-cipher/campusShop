@@ -1,4 +1,4 @@
-package com.wjj.campus.conf;
+package com.wjj.campus.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wjj.campus.entity.Comment;
@@ -10,7 +10,6 @@ import com.wjj.campus.mapper.ShopMapper;
 import com.wjj.campus.service.AreaService;
 import com.wjj.campus.service.CommentService;
 import com.wjj.campus.service.OrderService;
-import com.wjj.campus.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class HeadlineUpdate {
+public class HeadlineUpdateUtils {
     @Autowired
     private HeadlineMapper headlineMapper;
     

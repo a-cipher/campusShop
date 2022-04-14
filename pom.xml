@@ -169,6 +169,12 @@
             <artifactId>commons-codec</artifactId>
             <version>1.12</version>
         </dependency>
+        <!--支付宝sdk-->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.22.86.ALL</version>
+        </dependency>
 
     </dependencies>
 

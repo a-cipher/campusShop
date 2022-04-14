@@ -1,5 +1,6 @@
 package com.wjj.campus.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,6 +25,7 @@ public class OrderForm extends Base implements Serializable {
     /**
      * 订单唯一id，使用uuid生成
      */
+    @TableId
     private String orderId;
 
     /**

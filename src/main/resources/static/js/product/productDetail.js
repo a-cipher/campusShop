@@ -165,14 +165,26 @@ const sendMessage = function () {
         url: "/order/submitOrder",
         dataType: "json",
         data: {
-            orderInformation: JSON.stringify(orderInformation)
+            orderInformation: JSON.stringify(orderInformation),
+            price: shopDetailData.commodityDiscountPrices,
+            productName: shopDetailData.productName
         },
         success: function (response) {
             console.log(response);
             if (response.status === 200) {
                 console.log("提交订单成功！");
-                $.toast(response.msg);
-            } else {
+                let divForm = document.getElementsByTagName('divform')
+                if (divForm.length) {
+                    document.body.removeChild(divForm[0])
+                }
+                const div=document.createElement('divform');
+                div.innerHTML=response.data; // data就是接口返回的form 表单字符串
+                document.body.appendChild(div);
+                // document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
+                document.forms[0].submit();
+                $.toast(response.msg); //前端提醒的参数
+            }
+            else {
                 console.log("请求失败");
                 $.toast(response.msg, "forbidden");
             }

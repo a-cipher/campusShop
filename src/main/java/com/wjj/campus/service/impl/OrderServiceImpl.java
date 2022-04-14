@@ -32,7 +32,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderFormMapper,OrderForm> imp
 
     @Override
     public boolean addRecord(OrderForm orderForm) {
-        orderForm.setOrderId(CommonUtils.getUniversallyUniqueIdentifier());
+//        orderForm.setOrderId(CommonUtils.getUniversallyUniqueIdentifier());
         orderForm.setCreateTime(new Date());
         orderForm.setLastEditTime(new Date());
         // 默认设置为提交订单未处理状态

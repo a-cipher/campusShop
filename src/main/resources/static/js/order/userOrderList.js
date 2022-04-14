@@ -3,7 +3,7 @@
  * @param orderId 订单编号
  * @constructor
  */
-const OrderOperational = function (orderId) {
+const OrderOperational = function (orderId,price) {
     console.log("订单id = " + orderId);
     $.actions({
         actions: [{
@@ -18,13 +18,14 @@ const OrderOperational = function (orderId) {
                     empty: true, // 是否允许为空
                     onOK: function (input) {
                         //点击确认
-                        console.log("确认提交订单，商家备注信息：" + input.valueOf());
+                        console.log("确认取消订单，用户备注信息：" + input.valueOf());
                         $.ajax({
                             type: "post",
                             url: "/order/userRejectOrder",
                             dataType: "json",
                             data: {
                                 orderId: orderId,
+                                price: price,
                                 message: input.valueOf()
                             },
                             success: function (rtn) {
@@ -37,7 +38,7 @@ const OrderOperational = function (orderId) {
                                     $1.append(t);
                                     $("#orderShop_" + orderId).text(rtn.data.shopRemark);
                                 } else {
-                                    $.toast("操作失败", "forbidden");
+                                    $.toast(rtn.msg, "forbidden");
                                     let $1 = $("#orderStatus_" + orderId);
                                     $1.empty();
                                     const t = '<span>' + rtn.data.orderStatus + '</span>';

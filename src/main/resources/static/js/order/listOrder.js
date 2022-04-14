@@ -3,7 +3,7 @@
  * @param orderId 订单编号
  * @constructor
  */
-const OrderOperational = function (orderId) {
+const OrderOperational = function (orderId,price) {
     console.log("订单id = " + orderId);
     $.actions({
         actions: [{
@@ -79,6 +79,7 @@ const OrderOperational = function (orderId) {
                             dataType: "json",
                             data: {
                                 orderId: orderId,
+                                price: price,
                                 message: input.valueOf()
                             },
                             success: function (rtn) {
@@ -91,7 +92,7 @@ const OrderOperational = function (orderId) {
                                     $1.append(t);
                                     $("#orderShop_" + orderId).text(rtn.data.shopRemark);
                                 } else {
-                                    $.toast("操作失败", "forbidden");
+                                    $.toast(rtn.msg, "forbidden");
                                     let $1 = $("#orderStatus_" + orderId);
                                     $1.empty();
                                     const t = '<span>' + rtn.data.orderStatus + '</span>';

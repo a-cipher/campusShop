@@ -265,7 +265,7 @@ public class ProductController {
      */
     @GetMapping(value = "/modifyProductStatus")
     @ResponseBody
-    public JsonResponse modifyProductStatus(int productId) {
+    public JsonResponse modifyProductStatus(Integer productId) {
         productService.modifyProductStatus(productId);
         return JsonResponse.ok();
     }

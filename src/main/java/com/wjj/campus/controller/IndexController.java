@@ -36,6 +36,6 @@ public class IndexController {
 
     @GetMapping(value = "/test")
     public String test() {
-        return "test";
+        return "testPay";
     }
 }

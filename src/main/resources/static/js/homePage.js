@@ -128,7 +128,7 @@ const userInfoHtml = '<header class="demos-header">\n' +
     '    <div class="userHeadImage">\n' +
     '        <img id="userInfoImage" src="/images/wuman.png" alt="">\n' +
     '    </div>\n' +
-    '    <div class="userInfoName" id="userInfoUsername">请先登录！</div>\n' +
+    '    <div class="userInfoName" id="userInfoUsername">点击操作设置您的基本信息！</div>\n' +
     '    <div></div>\n' +
     '</div>\n' +
     '<div class="weui-cells">\n' +
@@ -148,6 +148,7 @@ const userInfoHtml = '<header class="demos-header">\n' +
     '        <div class="weui-cell__bd">\n' +
     '            <p>邮箱</p>\n' +
     '        </div>\n' +
+    '        <div class="weui-cell__ft" id="userInfoEmail"></div>\n' +
     '    </div>\n' +
     '</div>\n' +
     '<div class="weui-cells">\n' +

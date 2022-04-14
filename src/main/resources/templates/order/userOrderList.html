@@ -69,7 +69,7 @@
   <!--    th:onclick="'OrderOperational(o' + ${order.orderId} + ')'"-->
   <div class="weui-form-preview__ft">
     <button class="weui-form-preview__btn weui-form-preview__btn_primary" type="button"
-            th:onclick="OrderOperational([[${order.orderId}]]);">
+            th:onclick="OrderOperational([[${order.orderId}]],[[${order.price}]]);">
       操作
     </button>
   </div>
