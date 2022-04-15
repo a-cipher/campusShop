@@ -128,7 +128,7 @@ const userInfoHtml = '<header class="demos-header">\n' +
     '    <div class="userHeadImage">\n' +
     '        <img id="userInfoImage" src="/images/wuman.png" alt="">\n' +
     '    </div>\n' +
-    '    <div class="userInfoName" id="userInfoUsername">点击操作设置您的基本信息！</div>\n' +
+    '    <div class="userInfoName" id="userInfoUsername">信息未完善！</div>\n' +
     '    <div></div>\n' +
     '</div>\n' +
     '<div class="weui-cells">\n' +
