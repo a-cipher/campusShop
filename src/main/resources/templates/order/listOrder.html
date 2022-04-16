@@ -33,9 +33,10 @@
             th:id="'orderStatus_' + ${order.orderId} ">
             <!--  0-提交订单未处理 ， 1-商家已接单， 2-商家拒接订单          -->
             <span th:case="0">等待商家处理</span>
-            <span th:case="1">商家已接单</span>
+            <span th:case="1">商家接单未送达</span>
             <span th:case="2">商家拒接订单</span>
             <span th:case="3">用户取消订单</span>
+            <span th:case="4">用户确认收货</span>
         </em>
     </div>
     <div class="weui-form-preview__bd">

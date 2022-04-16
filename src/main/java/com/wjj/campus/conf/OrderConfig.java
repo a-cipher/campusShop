@@ -25,7 +25,7 @@ public class OrderConfig {
     /**
      * 商家已接单
      */
-    public static final String ORDER_RECEIVED_STRING = "商家已接单";
+    public static final String ORDER_RECEIVED_STRING = "商家接单未送达";
     /**
      * 商家拒接订单
      */
@@ -42,5 +42,13 @@ public class OrderConfig {
      * 用户取消订单
      */
     public static final String ORDER_USER_REFUSE_STRING = "用户取消订单";
+    /**
+     * 用户确认收货
+     */
+    public static final int ORDER_USER_CONFIRM_INDEX = 4;
+    /**
+     * 用户确认收货
+     */
+    public static final String ORDER_USER_CONFIRM_STRING = "用户确认收货";
 
 }

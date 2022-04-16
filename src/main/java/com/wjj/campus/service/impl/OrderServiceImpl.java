@@ -55,15 +55,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderFormMapper,OrderForm> imp
     public List<OrderForm> getOrderListByUserId(int userId,Integer flag) {
         QueryWrapper<OrderForm> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",userId);
+        wrapper.orderByDesc("last_edit_time");
+        //      * 订单状态，0-提交订单未处理 ， 1-商家已接单， 2-商家拒接订单, 3-用户取消 ，4-确认收货
         if(flag==null){
             log.debug("查询全部");
         }else if(flag==0){
-            wrapper.eq("order_status",0);
+            wrapper.in("order_status",0,1);
         }else if(flag==1){
-            wrapper.eq("order_status",1);
+            wrapper.eq("order_status",4);
         }else if(flag==2){
-            wrapper.ne("order_status",0);
-            wrapper.ne("order_status",1);
+            wrapper.in("order_status",2,3);
         }
         return orderFormMapper.selectList(wrapper);
     }
@@ -96,6 +97,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderFormMapper,OrderForm> imp
         orderForm.setOrderId(orderId);
         //      * 订单状态，0-提交订单未处理 ， 1-商家已接单， 2-商家拒接订单, 3-用户取消
         orderForm.setOrderStatus(3);
+        orderForm.setOrderUserRemark(message);
+        orderForm.setLastEditTime(new Date());
+        return orderFormMapper.modifyOrder(orderForm) > 0;
+    }
+
+    @Override
+    public boolean userConfirmOrder(String orderId, String message) {
+        OrderForm orderForm = new OrderForm();
+        orderForm.setOrderId(orderId);
+        //      * 订单状态，0-提交订单未处理 ， 1-商家已接单， 2-商家拒接订单, 3-用户取消 ，4-确认收货
+        orderForm.setOrderStatus(4);
         orderForm.setOrderUserRemark(message);
         orderForm.setLastEditTime(new Date());
         return orderFormMapper.modifyOrder(orderForm) > 0;

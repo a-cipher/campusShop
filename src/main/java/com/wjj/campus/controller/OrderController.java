@@ -231,8 +231,8 @@ public class OrderController {
             AlipayTradeRefundResponse refund = myAlipayUtils.refund(orderId, price, message);
             //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
             if(!refund.isSuccess()){
-                orderService.removeById(orderId);
-                return JsonResponse.errorMsg("异常订单号，删除该订单");
+//                orderService.removeById(orderId);
+                return JsonResponse.errorMsg("异常订单号，无法处理");
             }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
@@ -269,8 +269,8 @@ public class OrderController {
             AlipayTradeRefundResponse refund = myAlipayUtils.refund(orderId, price, message);
             //退款失败，原因一般为订单号不存在于支付宝，直接删除该订单
             if(!refund.isSuccess()){
-                orderService.removeById(orderId);
-                return JsonResponse.errorMsg("异常订单号，删除该订单");
+//                orderService.removeById(orderId);
+                return JsonResponse.errorMsg("异常订单号，无法处理");
             }
             if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
                 map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
@@ -280,6 +280,42 @@ public class OrderController {
                 map.put("orderStatus", OrderConfig.ORDER_REFUSE_STRING);
             } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_USER_REFUSE_INDEX){
                 map.put("orderStatus", OrderConfig.ORDER_USER_REFUSE_STRING);
+            }
+            map.put("shopRemark", orderForm.getOrderShopRemark());
+            return JsonResponse.ok(map);
+        }
+        return JsonResponse.errorMsg("订单处理失败！");
+    }
+
+    /**
+     * 用户确认收货
+     * @param orderId
+     * @param message
+     * @return
+     */
+    @PostMapping(value = "/userConfirmOrder")
+    @ResponseBody
+    public JsonResponse userConfirmOrder(@RequestParam("orderId") String orderId,
+                                        @RequestParam("orderStatus") int orderStatus,
+                                        @RequestParam("price") String price,
+                                        @RequestParam("message") String message) throws AlipayApiException {
+        //取消订单操作只针对0，1
+        if (orderStatus != 1) {
+            return JsonResponse.errorMsg("该订单状态无法确认收货");
+        }
+        if (orderService.userConfirmOrder(orderId, message)) {
+            Map<String, Object> map = new HashMap<>(2);
+            OrderForm orderForm = orderService.getRecordByOrderId(orderId);
+            if (orderForm.getOrderStatus() == OrderConfig.ORDER_RECEIVED_INDEX) {
+                map.put("orderStatus", OrderConfig.ORDER_RECEIVED_STRING);
+            } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_UNPROCESSED_INDEX) {
+                map.put("orderStatus", OrderConfig.ORDER_UNPROCESSED_INDEX);
+            } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_REFUSE_INDEX) {
+                map.put("orderStatus", OrderConfig.ORDER_REFUSE_STRING);
+            } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_USER_REFUSE_INDEX) {
+                map.put("orderStatus", OrderConfig.ORDER_USER_REFUSE_STRING);
+            } else if (orderForm.getOrderStatus() == OrderConfig.ORDER_USER_CONFIRM_INDEX) {
+                map.put("orderStatus", OrderConfig.ORDER_USER_CONFIRM_STRING);
             }
             map.put("shopRemark", orderForm.getOrderShopRemark());
             return JsonResponse.ok(map);

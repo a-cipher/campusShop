@@ -2,15 +2,19 @@ package com.wjj.campus;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wjj.campus.entity.OrderForm;
+import com.wjj.campus.entity.Shop;
 import com.wjj.campus.mapper.OrderFormMapper;
+import com.wjj.campus.mapper.PersonInfoMapper;
 import com.wjj.campus.mapper.ShopMapper;
 import com.wjj.campus.service.CommentService;
 import com.wjj.campus.service.OrderService;
+import com.wjj.campus.service.PersonInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @SpringBootTest
 class CampusApplicationTests {
@@ -32,6 +36,9 @@ class CampusApplicationTests {
 
     @Autowired
     private OrderFormMapper orderFormMapper;
+
+    @Autowired
+    private PersonInfoMapper personInfoMapper;
 
     @Test
     public void shopTest(){
@@ -61,5 +68,10 @@ class CampusApplicationTests {
         //解码
         java.net.URLDecoder.decode(areaName, "UTF-8");
         System.out.println(areaName);
+    }
+
+    @Test
+    public void get(){
+        System.out.println(personInfoMapper.queryById(13));
     }
 }

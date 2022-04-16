@@ -23,6 +23,7 @@ $(function () {
         console.log("成功接收到来自服务器数据");
         if (response.status === 200) {
             const productCategoryList = response.data.productCategoryList;
+            console.log(response.data);
             // 完善商品类别下拉列表
             let productCategoryHtml = '';
             productCategoryList.map(function (item) {
@@ -406,6 +407,7 @@ const submitFunction = function () {
 
         // 验证码
         const verifyCode = $("#verifyCode").val();
+        console.log(verifyCode);
         if (validateRequired(verifyCode, "验证码不能为空")) {
             removeDisable(checkButton);
             return false;
@@ -430,6 +432,8 @@ const submitFunction = function () {
         product.priority = productPriority;
         // 商店id
         product.productId = getUrlParam("productId");
+        product.shopId = getUrlParam("shopId");
+        // console(product.)
         let formData = new FormData();
         // 处理缩略图
         if (localProductThumbnail.length > 0) {
@@ -455,6 +459,7 @@ const submitFunction = function () {
 
 const callBackFunction = function () {
     console.log("修改商品完成");
+    window.location.href = "/shop/managerProduct?shopId=" + getUrlParam("shopId");
 };
 
 const checkButtonFunction = function () {

@@ -64,6 +64,62 @@ const OrderOperational = function (orderId,price,orderStatus) {
                     }
                 });
             }
+        },{
+            text: "确认收货",
+            className: "color-success",
+            onClick: function () {
+                console.log("确认收货按钮！");
+                $.prompt({
+                    title: '确定',
+                    text: '确认收货',
+                    input: '',
+                    empty: true, // 是否允许为空
+                    onOK: function (input) {
+                        //点击确认
+                        console.log("确认收货，用户备注信息：" + input.valueOf());
+                        $.ajax({
+                            type: "post",
+                            url: "/order/userConfirmOrder",
+                            dataType: "json",
+                            data: {
+                                orderId: orderId,
+                                price: price,
+                                orderStatus: orderStatus,
+                                message: input.valueOf()
+                            },
+                            success: function (rtn) {
+                                console.log(rtn);
+                                if (rtn.status === 200) {
+                                    $.toast("操作成功");
+                                    let $1 = $("#orderStatus_" + orderId);
+                                    $1.empty();
+                                    const t = '<span>' + rtn.data.orderStatus + '</span>';
+                                    $1.append(t);
+                                    $("#orderShop_" + orderId).text(rtn.data.shopRemark);
+                                } else {
+                                    $.toast(rtn.msg, "forbidden");
+                                    let $1 = $("#orderStatus_" + orderId);
+                                    $1.empty();
+                                    const t = '<span>' + rtn.data.orderStatus + '</span>';
+                                    $1.append(t);
+                                    $("#orderShop_" + orderId).text(rtn.data.shopRemark);
+                                }
+                            },
+                            error: function (xhr) {
+                                console.log("错误提示： " + xhr + " ---- " + xhr.status + " " + xhr.statusText);
+                            },
+                            //请求完成后回调函数 (请求成功或失败之后均调用)。参数： XMLHttpRequest 对象和一个描述成功请求类型的字符串
+                            complete: function (XMLHttpRequest, textStatus) {
+                                console.log("函数调用完成，将按钮设置为可用状态");
+                                // 请求完成，将按钮重置为可用
+                            }
+                        });
+                    },
+                    onCancel: function () {
+                        //点击取消
+                    }
+                });
+            }
         }]
     });
 };

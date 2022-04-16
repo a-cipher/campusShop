@@ -76,4 +76,12 @@ public interface OrderService extends IService<OrderForm> {
      */
 
     boolean userRejectOrder(String orderId, String message);
+
+    /**
+     * 用户确认收货
+     * @param orderId
+     * @param message
+     * @return
+     */
+    boolean userConfirmOrder(String orderId, String message);
 }
