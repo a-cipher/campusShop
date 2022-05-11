@@ -209,10 +209,10 @@ var modifyShopSubmit = function () {
         var shopImg = document.getElementById("modifyShopImage").files[0];
         var formData = new FormData();
         formData.append("shopImg", shopImg);
-        formData.append("shop", JSON.stringify(shop));
+        formData.append("shopMessage", JSON.stringify(shop));
         formData.append("verifyCode", verifyCode);
         console.log(shop);
-        postRequest("/shop/modifyShop", formData, checkButton, "/index");
+        postRequest("/shop/modifyShop", formData, checkButton, "/shop/listShop");
     }
 };
 

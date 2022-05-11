@@ -8,6 +8,7 @@ import com.wjj.campus.model.JsonResponse;
 import com.wjj.campus.service.ProductCategoryService;
 import com.wjj.campus.service.ProductImageService;
 import com.wjj.campus.service.ProductService;
+import com.wjj.campus.service.ShopService;
 import com.wjj.campus.util.ChenHttpUtils;
 import com.wjj.campus.util.CommonStrings;
 import com.wjj.campus.util.CommonUtils;
@@ -288,7 +289,10 @@ public class ProductController {
     }
 
     @GetMapping("/productDetail")
-    public String showProductDetail() {
+    public String showProductDetail(Integer shopId) {
+        if (shopService.getById(shopId).getShopCategoryId()==6) {
+            return "product/courierHelp";
+        }
         return "product/productDetails";
     }
 
@@ -312,4 +316,7 @@ public class ProductController {
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
     }
+
+    @Autowired
+    private ShopService shopService;
 }

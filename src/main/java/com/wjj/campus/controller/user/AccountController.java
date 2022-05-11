@@ -1,7 +1,9 @@
 package com.wjj.campus.controller.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wjj.campus.conf.UserConfig;
 import com.wjj.campus.entity.LocalAccount;
+import com.wjj.campus.entity.OrderForm;
 import com.wjj.campus.entity.PersonInfo;
 import com.wjj.campus.model.JsonResponse;
 import com.wjj.campus.service.LocalAccountService;
@@ -142,12 +144,14 @@ public class AccountController {
                                          @RequestParam("shopId") int shopId) {
         LocalAccount user = (LocalAccount) request.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<>(4);
+        QueryWrapper<OrderForm> wrapper = new QueryWrapper<>();
+        wrapper.eq("shop_id",shopId).eq("user_id",user.getUserId());
         if (user == null) {
             // 未登录
             map.put("status", 400);
             map.put("message", "你还没登录，请登录！");
             return JsonResponse.error(null, map);
-        } else if (user.getUserType() == UserConfig.GENERAL_USER_INDEX) {
+        } else if (user.getUserType() == UserConfig.GENERAL_USER_INDEX && orderService.getOne(wrapper)!=null) {
             // 已经登录，是普通用户
             map.put("status", 200);
             return JsonResponse.error(null, map);

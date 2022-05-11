@@ -301,30 +301,71 @@ public class ShopController {
      */
     @PostMapping("/modifyShop")
     @ResponseBody
-    public JsonResponse modifyShop(HttpServletRequest request) throws UnsupportedEncodingException {
+    public JsonResponse modifyShop(HttpServletRequest request,
+                                   @RequestParam("shopMessage") String shopMessage,
+                                   @RequestParam("verifyCode") String verifyCode,
+                                   @RequestParam(value = "shopImg", required = false) MultipartFile shopImg) throws UnsupportedEncodingException {
         // 获取本次修改的店铺id
         Integer shopId = (Integer) request.getSession().getAttribute(MODIFY_SHOP_ID);
         if (shopId == null) {
             return JsonResponse.errorMsg("会话过期或请求出错，请重试！");
         }
-        // 接收并转化相应的参数，包括店铺信息以及图片信息
-        AtomicReference<Map<String, Object>> modifyMap = new AtomicReference<>(doUploadMessage(request, false));
-        if (modifyMap.get().get(ERROR) != null) {
-            return (JsonResponse) modifyMap.get().get(ERROR);
+//        // 接收并转化相应的参数，包括店铺信息以及图片信息
+//        AtomicReference<Map<String, Object>> modifyMap = new AtomicReference<>(doUploadMessage(request, false));
+//        if (modifyMap.get().get(ERROR) != null) {
+//            return (JsonResponse) modifyMap.get().get(ERROR);
+//        }
+//        // 需要修改的店铺信息
+//        Shop modifyShop = (Shop) modifyMap.get().get("shop");
+//        // 设置店铺id
+//        modifyShop.setShopId(shopId);
+//        // 上传的文件流
+//        InputStream uploadFile = (InputStream) modifyMap.get().get("uploadFile");
+//        // 上传文件的文件名
+//        String filename = (String) modifyMap.get().get("filename");
+//        FileContainer fileContainer = new FileContainer();
+//        fileContainer.setFileInputStream(uploadFile);
+//        fileContainer.setFileName(filename);
+//        if (shopService.modifyShop(modifyShop, fileContainer)) {
+//            return JsonResponse.ok("修改成功！");
+//        } else {
+//            return JsonResponse.errorMsg("修改失败！");
+//        }
+        logger.info(shopMessage);
+        if (StringUtils.isBlank(shopMessage)) {
+            return JsonResponse.errorMsg("必要信息不能为空");
         }
-        // 需要修改的店铺信息
-        Shop modifyShop = (Shop) modifyMap.get().get("shop");
-        // 设置店铺id
-        modifyShop.setShopId(shopId);
-        // 上传的文件流
-        InputStream uploadFile = (InputStream) modifyMap.get().get("uploadFile");
-        // 上传文件的文件名
-        String filename = (String) modifyMap.get().get("filename");
+        if (StringUtils.isBlank(verifyCode)) {
+            return JsonResponse.errorMsg("验证码不能为空");
+        } else {
+            String cacheCode = (String) request.getSession().getAttribute(CommonStrings.VALIDATE_CODE);
+            // 验证码错误
+            if (!(cacheCode.toLowerCase().equals(verifyCode.toLowerCase()))) {
+                return JsonResponse.errorMsg("验证码错误！");
+            }
+        }
+        if (shopImg == null) {
+            return JsonResponse.errorMsg("店铺的图片不能为空");
+        }
+        // 店铺信息
+        Shop shop = JSON.parseObject(shopMessage, Shop.class);
+        shop.setShopId(shopId);
+        // 封装上传的商铺图片
         FileContainer fileContainer = new FileContainer();
-        fileContainer.setFileInputStream(uploadFile);
-        fileContainer.setFileName(filename);
-        if (shopService.modifyShop(modifyShop, fileContainer)) {
-            return JsonResponse.ok("修改成功！");
+        // 上传的文件流
+        try {
+            fileContainer.setFileInputStream(shopImg.getInputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 上传文件的文件名
+        fileContainer.setFileName(shopImg.getOriginalFilename());
+        // 设置店主
+//        LocalAccount user = (LocalAccount) request.getSession().getAttribute("user");
+//        shop.setOwnerId(user.getUserId());
+        if (shopService.modifyShop(shop, fileContainer)) {
+            return JsonResponse.ok("修改成功");
         } else {
             return JsonResponse.errorMsg("修改失败！");
         }

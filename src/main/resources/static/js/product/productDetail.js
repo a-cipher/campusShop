@@ -30,16 +30,19 @@ $(function () {
             shopDetailData.productName = product.productName;
             // 填充商品缩略图
             $("#productImage").attr('src', "/product/getProductThumbnail?productId=" + getUrlParam("productId"));
-            // 原价
+
             const originalPrice = product.normalPrice;
-            if (!validateParameterRequired(originalPrice)) {
-                $("#originalPrice").html("价格：" + originalPrice);
-                shopDetailData.CommodityPrice = originalPrice;
-            }
-            // 折扣价
             const discountPrice = product.promotionPrice;
-            if (!validateParameterRequired(discountPrice)) {
-                $("#originalPrice").html("折扣价：" + discountPrice);
+            // 原价,此时没有折扣价
+            if (validateParameterRequired(discountPrice) || discountPrice===0) {
+                $("#normalPrice").html("价格：¥ " + originalPrice);
+                shopDetailData.CommodityPrice = originalPrice;
+            }else
+            // 折扣价，存在折扣价时增加删除线效果
+            {
+                $("#originalPrice").html("原价：¥ " + originalPrice);
+                shopDetailData.CommodityPrice = originalPrice;
+                $("#discountPrice").html("折扣价：¥ " + discountPrice);
                 shopDetailData.commodityDiscountPrices = discountPrice;
             }
             // 商品介绍
