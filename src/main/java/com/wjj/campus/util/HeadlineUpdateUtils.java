@@ -37,7 +37,7 @@ public class HeadlineUpdateUtils {
      * 定时任务，每天2点自动执行
      * 头条计算：区域权重 + 订单数*3 + 评论数*2
      */
-    @Scheduled(cron = "0 13 21 * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void updateHeadline(){
         List<Shop> shops = shopMapper.selectList(null);
         Map<Shop, Integer> map = new HashMap<>();
@@ -73,6 +73,9 @@ public class HeadlineUpdateUtils {
             }else{
                 headline.setPriority(entry.getValue());
                 headline.setLastEditTime(new Date(System.currentTimeMillis()));
+                headline.setName(entry.getKey().getShopName());
+                headline.setLinked("/frontShop/shop?shopId="+entry.getKey().getShopId());
+                headline.setPicture(entry.getKey().getShopImg());
                 headlineMapper.updateById(headline);
             }
 
